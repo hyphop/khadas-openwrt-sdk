@@ -1,3 +1,5 @@
+# khadas openwrt [![Build Status](https://travis-ci.com/hyphop/khadas-openwrt-sdk.svg?branch=master)](https://travis-ci.com/hyphop/khadas-openwrt-sdk)
+
 # Khadas openwrt sdk 
 
 openwrt packages builder
