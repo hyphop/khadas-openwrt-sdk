@@ -12,4 +12,7 @@ uboot-mkimage \
 uinput \
 xxhash \
 zstd \
+pixz \
+pigz \
 vitetris \
+triggerhappy \

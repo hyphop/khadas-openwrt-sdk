@@ -1,6 +1,4 @@
-# khadas openwrt [![Build Status](https://travis-ci.com/hyphop/khadas-openwrt-sdk.svg?branch=master)](https://travis-ci.com/hyphop/khadas-openwrt-sdk)
-
-# Khadas openwrt sdk 
+# khadas openwrt sdk [![Build Status](https://travis-ci.com/hyphop/khadas-openwrt-sdk.svg?branch=master)](https://travis-ci.com/hyphop/khadas-openwrt-sdk)
 
 openwrt packages builder
 
@@ -12,5 +10,7 @@ openwrt packages builder
 
 ## related projects
 
-+ https://github.com/hyphop/khadas-uboot
++ https://github.com/hyphop/khadas-openwrt-feed-extra
++ https://github.com/hyphop/khadas-openwrt
 + https://github.com/hyphop/khadas-linux-kernel
++ https://github.com/hyphop/khadas-uboot
