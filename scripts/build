@@ -13,10 +13,10 @@ PN="$(basename "$0")"
 PA="$(realpath "$PR")"
 RN="$(realpath "$0")"
 
-cd $PR
-
 . $0.lib
 . $0.conf
+
+cd "$PR"
 
 [ "$BUILD_DIR" ] || \
     BUILD_DIR=../build
