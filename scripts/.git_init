@@ -4,7 +4,7 @@
 
 ## automate basic new git repository create
 ## USAGE
-##	./tools/99_git_init
+##	sh ./scripts/.git_init
 
 NAME=$(basename "$(realpath .)")  #"#
 GNME="https://github.com/hyphop/$NAME.git"
