@@ -1,0 +1,79 @@
+#!/bin/bash
+
+## hyphop ##
+
+#= openwrt fast build packages by sdk
+
+## HOW TO
+
+## ./build -1|-2|-3|-3l
+
+PR="$(dirname "$0")"
+PN="$(basename "$0")"
+PA="$(realpath "$PR")"
+RN="$(realpath "$0")"
+
+cd $PR
+
+. $0.lib
+. $0.conf
+
+[ "$BUILD_DIR" ] || \
+    BUILD_DIR=../build
+
+[ -d "$BUILD_DIR" ] || \
+    mkdir -p "$BUILD_DIR"
+
+[ "$DOWNLOADS" ] || \
+    DOWNLOADS="$BUILD_DIR"
+
+[ "$DOWNLOADS" ] || \
+    mkdir -p "$DOWNLOADS"
+
+export DOWNLOADS=$DOWNLOADS 
+
+case $PATH in
+    */opt/bin:*);;
+    *)PATH="$PA/../opt/bin:$PATH";;
+esac
+
+./download $SDK_LINK || FAIL
+
+( cd $BUILD_DIR
+[ -d $SDK_DIR ] || {
+    echo "[i] extract $SDK_FILE">&2
+    tar -xf "$SDK_FILE" || {
+    rm $SDK_DIR
+    FAIL tar broken $SDK_FILE
+    }
+}
+)
+
+( cd $BUILD_DIR/$SDK_DIR || FAIL
+
+    echo "$FEEDS" > feeds.conf.new
+
+[ -s feeds.conf ] || \
+    cp feeds.conf.new feeds.conf
+
+## need check ??!!!
+diff feeds.conf.new feeds.conf
+
+./scripts/feeds update || FAIL
+
+)
+
+( cd $BUILD_DIR/$SDK_DIR
+
+./scripts/feeds install $(sh "$RN.packages") || FAIL
+
+echo "" > package/linux/Makefile
+
+make defconfig || FAIL
+
+$PA/config_merge -r .config  CONFIG_SIGNED_PACKAGES=n || FAIL
+
+make || FAIL
+
+)
+
