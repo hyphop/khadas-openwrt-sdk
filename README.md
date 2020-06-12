@@ -8,6 +8,10 @@ openwrt packages builder
     cd khadas-openwrt-sdk
     ./scripts/build
 
+## UPDATED
+
+Fri Jun 12 16:25:37 UTC 2020
+
 ## related projects
 
 + https://github.com/hyphop/khadas-openwrt-feed-extra
