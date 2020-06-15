@@ -39,13 +39,18 @@ esac
 
 NO_BUILD=
 NO_UPDATE_FEEDS=
+BUILD_ONLY=
 for a in "$@"; do
     case $a in
 	-n)
 	NO_UPDATE_FEEDS=1
 	;;
+	--only-*)
+	BUILD_ONLY="$BUILD_ONLY ${a#--only-}"
+	;;
 	--no-*)
 	NO_BUILD="$NO_BUILD ${a#--no-}"
+	;;
     esac
 done
 
@@ -53,7 +58,7 @@ done
 
 ( cd $BUILD_DIR
 [ -d $SDK_DIR ] || {
-    echo "[i] extract $SDK_FILE">&2
+    echo "[i] extract $SDK_FILE"
     tar -xf "$SDK_FILE" || {
     rm $SDK_DIR
     FAIL tar broken $SDK_FILE
@@ -76,8 +81,10 @@ diff feeds.conf.new feeds.conf
 
 )
 
+[ "$BUILD_ONLY" ] || {
+
 [ "$NO_BUILD" ] && {
-echo "[i] no build $NO_BUILD">&2
+echo "[i] no build $NO_BUILD"
 }
 
 BUILD_PKGS=
@@ -86,10 +93,17 @@ for p in $(grep -v ^\# "$RN.packages"); do
     BUILD_PKGS="$BUILD_PKGS $p"
 done
 
-echo $BUILD_PKGS
+}
+
+[ "$BUILD_ONLY" ] && {
+    BUILD_PKGS="$BUILD_ONLY"
+}
+
+echo "[i] BUILD $BUILD_PKGS"
 
 ( cd $BUILD_DIR/$SDK_DIR
 
+./scripts/feeds uninstall -a || FAIL
 ./scripts/feeds install $BUILD_PKGS || FAIL
 
 echo "" > package/linux/Makefile

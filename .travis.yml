@@ -1,4 +1,5 @@
 language: c
 dist: bionic
 #before_install: sudo apt-get install util-linux 
-script:  scripts/build -no-megatools
+#script:  scripts/build --no-megatools
+script:  scripts/build --only-i2c
