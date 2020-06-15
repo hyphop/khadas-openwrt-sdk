@@ -6,7 +6,7 @@
 
 ## HOW TO
 
-## ./build -1|-2|-3|-3l
+## ./build [-n] [--no-*] [--only-*]
 
 PR="$(dirname "$0")"
 PN="$(basename "$0")"
