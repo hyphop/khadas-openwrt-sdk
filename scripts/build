@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## hyphop ##
 
@@ -37,6 +37,18 @@ case $PATH in
     *)PATH="$PA/../opt/bin:$PATH";;
 esac
 
+NO_BUILD=
+NO_UPDATE_FEEDS=
+for a in "$@"; do
+    case $a in
+	-n)
+	NO_UPDATE_FEEDS=1
+	;;
+	--no-*)
+	NO_BUILD="$NO_BUILD ${a#--no-}"
+    esac
+done
+
 ./download $SDK_LINK || FAIL
 
 ( cd $BUILD_DIR
@@ -59,19 +71,32 @@ esac
 ## need check ??!!!
 diff feeds.conf.new feeds.conf
 
+[ "$NO_UPDATE_FEEDS" ] || \
 ./scripts/feeds update || FAIL
 
 )
 
+[ "$NO_BUILD" ] && {
+echo "[i] no build $NO_BUILD">&2
+}
+
+BUILD_PKGS=
+for p in $(grep -v ^\# "$RN.packages"); do
+    [ "${NO_BUILD%* $p*}" = "$NO_BUILD" ] && \
+    BUILD_PKGS="$BUILD_PKGS $p"
+done
+
+echo $BUILD_PKGS
+
 ( cd $BUILD_DIR/$SDK_DIR
 
-./scripts/feeds install $(sh "$RN.packages") || FAIL
+./scripts/feeds install $BUILD_PKGS || FAIL
 
 echo "" > package/linux/Makefile
 
 make defconfig || FAIL
 
-$PA/config_merge -r .config  CONFIG_SIGNED_PACKAGES=n || FAIL
+$PA/config_merge -r .config $(grep -v ^\# "$RN.config.olverlay") || FAIL
 
 make || FAIL
 
