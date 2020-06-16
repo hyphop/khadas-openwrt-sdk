@@ -133,7 +133,7 @@ echo "" > package/linux/Makefile
 
 make defconfig || FAIL
 
-$PA/config_merge -r .config $(grep -v ^\# "$RN.config.olverlay") || FAIL
+$PA/config_merge -r .config $(grep -v ^\# "$RN".config.overla* ) || FAIL
 
 [ "$NOOP" ] || \
 make || FAIL
