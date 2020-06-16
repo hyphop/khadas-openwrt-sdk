@@ -3,4 +3,4 @@ dist: bionic
 #before_install: sudo apt-get install util-linux 
 #script:  scripts/build --no-megatools
 #script:  scripts/build --only-i2c
-script: ./build --all -n -u --no-megatools
+script: scripts/build --all -n -u --no-megatools
