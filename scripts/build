@@ -40,10 +40,17 @@ esac
 NO_BUILD=
 NO_UPDATE_FEEDS=
 BUILD_ONLY=
+
 for a in "$@"; do
     case $a in
-	-n)
+	-u)
 	NO_UPDATE_FEEDS=1
+	;;
+	-n)
+	NOOP=1
+	;;
+	--all)
+	BUILD_ALL_FEED=extra
 	;;
 	--only-*)
 	BUILD_ONLY="$BUILD_ONLY ${a#--only-}"
@@ -81,13 +88,29 @@ diff feeds.conf.new feeds.conf
 
 )
 
+[ "$BUILD_ALL_FEED" ] && {
+cd $BUILD_DIR/$SDK_DIR
+echo "[i] build all FEED: $BUILD_ALL_FEED"
+./scripts/feeds list -r $BUILD_ALL_FEED | tee tmp/feed_list
+while read l; do
+    p=${l%% *}
+    [ "${NO_BUILD%* $p*}" = "$NO_BUILD" ] && \
+    BUILD_PKGS="$BUILD_PKGS $p"
+done < tmp/feed_list
+
+cd -
+}
+
+
 [ "$BUILD_ONLY" ] || {
 
 [ "$NO_BUILD" ] && {
 echo "[i] no build $NO_BUILD"
 }
 
-BUILD_PKGS=
+echo "[i] BUILD $BUILD_PKGS"
+
+[ "$BUILD_PKGS" ] || \
 for p in $(grep -v ^\# "$RN.packages"); do
     [ "${NO_BUILD%* $p*}" = "$NO_BUILD" ] && \
     BUILD_PKGS="$BUILD_PKGS $p"
@@ -112,6 +135,7 @@ make defconfig || FAIL
 
 $PA/config_merge -r .config $(grep -v ^\# "$RN.config.olverlay") || FAIL
 
+[ "$NOOP" ] || \
 make || FAIL
 
 )
