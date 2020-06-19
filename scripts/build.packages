@@ -4,8 +4,8 @@
 
 dialog
 exfat-utils
-i2c 
-uinput 
+i2c
+uinput
 squashfs-tools
 uboot-mkimage
 uinput
@@ -13,9 +13,16 @@ xxhash
 zstd
 pixz
 pigz
-vitetris
 triggerhappy
 megatools
 brcmfmac-khadas
 
+## replace
+
+busybox
 curl
+
+## fun
+
+vitetris
+ascii-patrol

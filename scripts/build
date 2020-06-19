@@ -41,6 +41,8 @@ NO_BUILD=
 NO_UPDATE_FEEDS=
 BUILD_ONLY=
 
+#MAKE_ARGS=
+
 for a in "$@"; do
     case $a in
 	-u)
@@ -58,6 +60,9 @@ for a in "$@"; do
 	--no-*)
 	NO_BUILD="$NO_BUILD ${a#--no-}"
 	;;
+	*)
+	MAKE_ARGS="$MAKE_ARGS $a"
+	;;
     esac
 done
 
@@ -72,6 +77,8 @@ done
     }
 }
 )
+
+ln -sf "$SDK_DIR/bin/packages/$OWARCH" "$BUILD_DIR"/packages || FAIL
 
 ( cd $BUILD_DIR/$SDK_DIR || FAIL
 
@@ -124,7 +131,8 @@ done
 
 echo "[i] BUILD $BUILD_PKGS"
 
-( cd $BUILD_DIR/$SDK_DIR
+BSDK="$BUILD_DIR/$SDK_DIR"
+( cd $BSDK
 
 ./scripts/feeds uninstall -a || FAIL
 ./scripts/feeds install $BUILD_PKGS || FAIL
@@ -133,10 +141,16 @@ echo "" > package/linux/Makefile
 
 make defconfig || FAIL
 
-$PA/config_merge -r .config $(grep -v ^\# "$RN".config.overla* ) || FAIL
+#$PA/config_merge -r .config $(grep -v ^\# "$RN".config.overla* ) || FAIL
+cd $PA
+for c in build.config.*; do
+    echo "[i] merge config $c"
+    ./config_merge -r "$BSDK/".config -c=$c || FAIL
+done
+cd - >/dev/null
 
 [ "$NOOP" ] || \
-make || FAIL
+make $MAKE_ARGS || FAIL
 
 )
 
