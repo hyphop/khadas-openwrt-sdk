@@ -78,7 +78,7 @@ done
 }
 )
 
-ln -sf "$SDK_DIR/bin/packages/$OWARCH" "$BUILD_DIR"/packages || FAIL
+#ln -sf "$SDK_DIR/bin/packages/$OWARCH" "$BUILD_DIR"/packages || FAIL
 
 ( cd $BUILD_DIR/$SDK_DIR || FAIL
 
@@ -135,7 +135,7 @@ BSDK="$BUILD_DIR/$SDK_DIR"
 ( cd $BSDK
 
 ./scripts/feeds uninstall -a || FAIL
-./scripts/feeds install $BUILD_PKGS || FAIL
+./scripts/feeds install -p $FEED_NAME $BUILD_PKGS || FAIL
 
 echo "" > package/linux/Makefile
 
