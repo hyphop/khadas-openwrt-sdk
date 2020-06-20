@@ -78,7 +78,9 @@ done
 }
 )
 
-#ln -sf "$SDK_DIR/bin/packages/$OWARCH" "$BUILD_DIR"/packages || FAIL
+[ -s "$BUILD_DIR"/packages ] && \
+    rm "$BUILD_DIR"/packages
+ln -sf "$SDK_DIR/bin/packages/$OWARCH" "$BUILD_DIR"/packages || FAIL
 
 ( cd $BUILD_DIR/$SDK_DIR || FAIL
 

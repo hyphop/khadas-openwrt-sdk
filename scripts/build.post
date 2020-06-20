@@ -45,7 +45,7 @@ P="$BUILD_DIR/packages"
     CMD rm -rf $P
 }
 
-CMD ln -s $SDK_DIR/bin/packages/$OWARCH/$FEED_NAME "$P"
+#CMD ln -s $SDK_DIR/bin/packages/$OWARCH/$FEED_NAME "$P"
 
 for d in "$BUILD_DIR/$SDK_DIR/bin/packages/$OWARCH"/*; do
     b=$(basename $d)
