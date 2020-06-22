@@ -69,7 +69,7 @@ done
 ./download $SDK_LINK || FAIL
 
 ( cd $BUILD_DIR
-[ -d $SDK_DIR ] || {
+[ -d $SDK_DIR -a -f $SDK_DIR/Makefile ] || {
     echo "[i] extract $SDK_FILE"
     tar -xf "$SDK_FILE" || {
     rm $SDK_DIR
