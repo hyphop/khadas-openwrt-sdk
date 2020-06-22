@@ -14,13 +14,14 @@ zstd
 pixz
 pigz
 triggerhappy
-megatools
+#megatools
 brcmfmac-khadas
 
 ## replace
 
 busybox
 curl
+dropbear
 
 ## fun
 
